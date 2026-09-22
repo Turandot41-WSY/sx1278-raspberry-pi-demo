@@ -1,0 +1,6 @@
+# Serial timing for the local USB connections used by the antenna demo.
+# Timeouts and polling periods must be positive. Changes affect measured timing; retain this configuration with the experiment.
+[transport]
+boot_settle_ms = 2500 # Wait for a newly opened local Nano to complete its bootloader.
+read_poll_ms = 1 # Wait between host reads when no new bytes arrive, in ms.
+write_timeout_seconds = 0.5 # Maximum wait for a USB serial write, in seconds.

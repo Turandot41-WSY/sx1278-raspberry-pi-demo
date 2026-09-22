@@ -1,0 +1,94 @@
+# The sole operator configuration for main_transmit.py. Both the terminal and F5 read this file.
+# Raspberry Pi 5 sends independently over antennas to a local receiver on another computer.
+# saved retains the explicit frame file path used by software tests.
+# All paths are relative to the project root; an empty string means unconfigured. Ordinary antenna tests use [antenna].
+action = "antenna"
+
+[antenna]
+# After preparing data, ask in the terminal before sending. Only y/yes connects to the board; Enter, n or Ctrl+C cancels and retains the data.
+# Data source, no units: saved reads existing data; latest downloads and saves a new dataset of five passes before each send.
+# latest reuses [acquire] in config/main_dataset.toml. Download or validation failure stops execution without falling back to old data.
+data_source = "saved"
+
+# In saved mode, optionally select a complete orbit dataset directory, e.g. data/orbit/gomx1_39430/YOUR_TIMESTAMP.
+# A nonempty path generates frames of 64 bytes, calculates SHA256 and applies Doppler per frame; frames/sha256/orbit_dataset below are not selected.
+# Leave empty to use the existing frame file settings below. latest ignores this field. Supply a directory path, not a single bin file.
+saved_dataset = "data/replay/gomx1-example/orbit"
+
+# Serial port of the transmitting board on the Pi; verify the actual port after reconnecting.
+port = "/dev/ttyUSB0"
+
+# Existing frame file: required only when data_source=saved and saved_dataset is empty; frames must correspond to orbit samples in order.
+frames = "data/replay/gomx1-example/frames.bin"
+
+# Existing frame file: complete SHA256 of that file; update when replacing it. latest or a nonempty saved_dataset calculates the hash automatically.
+sha256 = "5a9c5b296490e989e4f8b29221ecd9c640cec7fd059452394cca22a78e636e63"
+
+# Build manifest for the firmware compiled and uploaded to the transmitting board; an identity mismatch stops execution.
+manifest = "firmware/build/receive-endpoint/manifest.json"
+
+# Root for diagnostic evidence; each run creates a new UTC subdirectory.
+output = "output/antenna-doppler"
+
+# First frame index, starting at 0; must be nonnegative and less than the total frame count.
+start = 0
+
+# Frame count as a positive integer string or all; start with 3. all sends from start to the end.
+count = "3"
+
+# Select the same modulation independently at both ends; this computer does not configure the receiver over the network.
+profile = "LoRa"
+
+# Transmit power in dBm, selected from the PA table; currently 2.
+pa_dbm = 2
+
+# Fixed frequency register value, used when orbit_dataset is empty; 7168000 corresponds to 437.5 MHz.
+reg_frf_word = 7168000
+
+# Additional wait after each completed frame in ms, nonnegative; for example 100 or 500.
+interval_ms = 1000
+
+# Wait for serial commands and TX completion in ms, positive; currently 2000.
+timeout_ms = 2000
+
+# Existing frame file: complete frozen orbit directory; empty selects fixed frequency. latest or a nonempty saved_dataset uses that dataset's frequency offsets.
+orbit_dataset = "data/replay/gomx1-example/orbit"
+
+
+# Existing frame file mode retained for software tests and explicit saved calls.
+[saved]
+# Serial port path; verify after reconnecting, e.g. /dev/cu.usbserial-210.
+port = "/dev/ttyUSB0"
+
+# Required: saved binary frame file, not CSV; the current file contains 2072 frames of 64 bytes each.
+frames = "data/replay/gomx1-example/frames.bin"
+
+# Required: complete SHA-256 of the frame file. Update together with frames to reject unintended or corrupted data.
+sha256 = "5a9c5b296490e989e4f8b29221ecd9c640cec7fd059452394cca22a78e636e63"
+
+# Required: production firmware build manifest JSON matching the board's firmware identity; see config/README.md for build commands.
+manifest = "firmware/build/receive-endpoint/manifest.json"
+
+# Output directory relative to the project root; {utc} expands to the current UTC time. Retain original evidence from each run.
+output = "output/transmit"
+
+# First frame index, starting at 0; for example, 0 selects the file's first frame.
+start = 0
+
+# Frame count as a string, e.g. "1", "10" or "all"; all sends from start to the end of the file.
+count = "3"
+
+# Modulation profile name, exactly matching ProfileId in profiles.csv, e.g. LoRa or GFSK. Restart the sender after saving.
+profile = "LoRa"
+
+# Transmit power selection in dBm; must be defined in pa_settings.csv; currently 2.
+pa_dbm = 2
+
+# Fixed carrier register integer of 24 bits; 7168000 represents the project's 437.5 MHz setting. saved does not execute the orbit frequency offset plan per frame.
+reg_frf_word = 7168000
+
+# Wait between frames in ms, a nonnegative integer; 1000 means 1 second.
+interval_ms = 1000
+
+# Wait for a command response in ms, greater than 0; avoid long breakpoint pauses after issuing hardware commands.
+timeout_ms = 2000

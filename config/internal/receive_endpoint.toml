@@ -1,0 +1,11 @@
+# Production firmware configuration for board B; initial values require operator verification and do not establish physical validation of this board.
+# Changing any field or comment changes this file's hash; rebuild, upload and use the new manifest for the changed configuration.
+endpoint_id = 2 # Project assigned nonzero uint32 endpoint ID, range 1-4294967295; board A uses 1 and this board uses 2.
+board_label = "Receiver Nano ATmega328P; Ra-02" # Device description in build records; set according to the actual assembly.
+nss_pin = 10 # Nano digital pin, range 2-19; must not overlap SPI pins 11/12/13 or another selected signal.
+reset_pin = 9 # Nano digital pin, range 2-19, connected to module RESET; must differ from NSS and DIO0.
+dio0_pin = 2 # Nano external interrupt pin, either 2 or 3; match the actual DIO0 wiring.
+spi_hz = 100000 # SPI clock in Hz, range 1-8000000; initially retain the previously used 100 kHz.
+# Select from this board's bootloader handshake: old uploads at 57600, atmega328 at 115200; application UART always uses 115200.
+# Allowed: arduino:avr:nano:cpu=atmega328old or arduino:avr:nano:cpu=atmega328. The COM port name does not identify the bootloader.
+fqbn = "arduino:avr:nano:cpu=atmega328old"

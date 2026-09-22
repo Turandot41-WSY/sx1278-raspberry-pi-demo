@@ -1,0 +1,130 @@
+{
+  "generator": {
+    "git_commit": "",
+    "gravity_model": "WGS-72",
+    "schema_version": 1,
+    "software_versions": {
+      "astropy": "8.0.1",
+      "numpy": "2.5.2",
+      "python": "3.12.14",
+      "sgp4": "2.27"
+    }
+  },
+  "orbit": {
+    "epoch_age_seconds": 17321.748697,
+    "epoch_utc": "2026-09-06T06:42:06.983136Z",
+    "omm_fields": {
+      "ARG_OF_PERICENTER": "176.2332",
+      "BSTAR": ".17442169E-3",
+      "CENTER_NAME": "EARTH",
+      "CLASSIFICATION_TYPE": "U",
+      "ECCENTRICITY": ".01280101",
+      "ELEMENT_SET_NO": "999",
+      "EPHEMERIS_TYPE": "0",
+      "EPOCH": "2026-09-06T06:42:06.983136",
+      "INCLINATION": "97.6450",
+      "MEAN_ANOMALY": "183.9870",
+      "MEAN_ELEMENT_THEORY": "SGP4",
+      "MEAN_MOTION": "14.69667997",
+      "MEAN_MOTION_DDOT": "0",
+      "MEAN_MOTION_DOT": ".1126E-4",
+      "NORAD_CAT_ID": "39430",
+      "OBJECT_ID": "2013-066Q",
+      "OBJECT_NAME": "GOMX-1",
+      "RA_OF_ASC_NODE": "84.6318",
+      "REF_FRAME": "TEME",
+      "REV_AT_EPOCH": "68182",
+      "TIME_SYSTEM": "UTC"
+    }
+  },
+  "outputs": {
+    "mission_records.bin": {
+      "byte_count": 103600,
+      "sha256": "1c78ebe1bcb44438ec2e80a3471b1e5a074dffff4021cf94e99acbdc1d491069"
+    },
+    "passes.csv": {
+      "byte_count": 1569,
+      "sha256": "b532d00f301717d53d1fa8e13a9181be195c98a08af12c053ebd5e13eefb9a0b"
+    },
+    "samples.csv": {
+      "byte_count": 875844,
+      "sha256": "876f5b933d4160a23caed00736ea9dbe4862356f2b02086da3dfa1319ee3a169"
+    }
+  },
+  "rf": {
+    "nominal_carrier_hz": 437500000.0,
+    "speed_of_light_mps": 299792458.0,
+    "sx1278_fstep_hz": 61.03515625,
+    "sx1278_nominal_frf_word": 7168000
+  },
+  "schema_version": 1,
+  "search": {
+    "actual_peak_elevations_deg": [
+      10.448382396641652,
+      21.656799147326826,
+      42.97814350827639,
+      70.902403225433,
+      88.90836536202877
+    ],
+    "chunk_days": 1,
+    "dynamic_selection_anchors_deg": [
+      10.45,
+      30.064999999999998,
+      49.67999999999999,
+      69.295,
+      88.91
+    ],
+    "end_utc": "2026-09-06T11:30:48Z",
+    "lookback_days": 2,
+    "selection_rule": "five distinct complete passes spanning the actual candidate low-to-high peak-elevation range; dynamic anchors are derived from that range and ties use the newer AOS tuple",
+    "start_utc": "2026-09-04T11:30:48Z",
+    "step_seconds": 1
+  },
+  "sources": {
+    "iers_a": {
+      "byte_count": 3764888,
+      "filename": "source/iers_a_finals2000A.all",
+      "http_headers": {
+        "Accept-Ranges": "bytes",
+        "Cache-Control": "no-cache, no-store",
+        "Connection": "close",
+        "Content-Language": "de",
+        "Content-Length": "3764888",
+        "Content-Security-Policy": "default-src 'self' *.bkg *.iers.org *.plot.ly *.erdrotation.de *.ggos-d.de data:; script-src 'self' *.bkg *.iers.org *.plot.ly *.erdrotation.de *.ggos-d.de; frame-ancestors *.bkg *.iers.org *.plot.ly *.erdrotation.de *.ggos-d.de *.gsb-itzbund.de *.itz.in.bund.de;",
+        "Date": "Sun, 06 Sep 2026 11:31:37 GMT",
+        "Last-Modified": "Thu, 03 Sep 2026 17:46:08 GMT",
+        "Pragma": "no-cache",
+        "Strict-Transport-Security": "max-age=16070400; includeSubDomains",
+        "X-Content-Type-Options": "nosniff",
+        "X-WebKit-CSP": "default-src 'self' *.bkg *.iers.org *.plot.ly *.erdrotation.de *.ggos-d.de data:; script-src 'self' *.bkg *.iers.org *.plot.ly *.erdrotation.de *.ggos-d.de; frame-ancestors *.bkg *.iers.org *.plot.ly *.erdrotation.de *.ggos-d.de *.gsb-itzbund.de *.itz.in.bund.de;",
+        "X-XSS-Protection": "1; mode=block"
+      },
+      "retrieved_at_utc": "2026-09-06T11:31:40.798323Z",
+      "sha256": "80119694522717471744a78b28bc872e998523f8b1e2007424f9cd08af7ac4c6",
+      "url": "https://datacenter.iers.org/data/9/finals2000A.all"
+    },
+    "omm": {
+      "byte_count": 1202,
+      "filename": "source/gomx1_39430.omm.xml",
+      "http_headers": {
+        "Connection": "close",
+        "Content-Disposition": "filename=\"39430.xml\"",
+        "Content-Length": "1202",
+        "Content-Type": "application/xml; charset=UTF-8",
+        "Date": "Sun, 06 Sep 2026 11:31:02 GMT",
+        "Server": "Microsoft-IIS/10.0",
+        "X-Powered-By": "PHP/8.2.20"
+      },
+      "retrieved_at_utc": "2026-09-06T11:30:48.731833Z",
+      "sha256": "b74221fa9ff8d1daddff714e8ce2fd2ccd781d2be23d55b603802188721cbbb1",
+      "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=39430&FORMAT=XML"
+    }
+  },
+  "station": {
+    "elevation_mask_deg": 10.0,
+    "height_m": 244.0,
+    "latitude_deg": 48.3268334,
+    "longitude_deg": 14.3236695,
+    "reference_frame": "WGS-84 geodetic / ITRS ECEF"
+  }
+}

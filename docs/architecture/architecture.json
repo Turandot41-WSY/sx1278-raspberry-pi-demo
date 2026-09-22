@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Raspberry Pi 5 antenna demo",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1300,
+      680
+    ]
+  },
+  "components": [
+    {
+      "id": "dataset",
+      "type": "database",
+      "label": "Frozen orbit data",
+      "sublabel": "orbit_dataset.py",
+      "pos": [
+        50,
+        75
+      ],
+      "size": [
+        230,
+        76
+      ]
+    },
+    {
+      "id": "pi",
+      "type": "backend",
+      "label": "Raspberry Pi 5",
+      "sublabel": "main_transmit.py",
+      "pos": [
+        50,
+        285
+      ],
+      "size": [
+        230,
+        76
+      ]
+    },
+    {
+      "id": "tx",
+      "type": "backend",
+      "label": "Nano B + SX1278",
+      "sublabel": "endpoint.ino \u00b7 endpoint 2",
+      "pos": [
+        500,
+        285
+      ],
+      "size": [
+        240,
+        76
+      ]
+    },
+    {
+      "id": "rx",
+      "type": "backend",
+      "label": "Nano A + SX1278",
+      "sublabel": "endpoint.ino \u00b7 endpoint 1",
+      "pos": [
+        970,
+        285
+      ],
+      "size": [
+        240,
+        76
+      ]
+    },
+    {
+      "id": "host",
+      "type": "backend",
+      "label": "Mac / Windows",
+      "sublabel": "main_receive.py",
+      "pos": [
+        970,
+        515
+      ],
+      "size": [
+        240,
+        76
+      ]
+    },
+    {
+      "id": "display",
+      "type": "frontend",
+      "label": "Receiver display",
+      "sublabel": "server.py \u00b7 web/app.js",
+      "pos": [
+        500,
+        515
+      ],
+      "size": [
+        240,
+        76
+      ]
+    },
+    {
+      "id": "logs",
+      "type": "database",
+      "label": "Transmission log",
+      "sublabel": "events.jsonl + frames.bin",
+      "pos": [
+        50,
+        515
+      ],
+      "size": [
+        230,
+        76
+      ]
+    },
+    {
+      "id": "build",
+      "type": "security",
+      "label": "Build identity",
+      "sublabel": "board_control.py \u00b7 manifest",
+      "pos": [
+        500,
+        75
+      ],
+      "size": [
+        240,
+        76
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "dataset",
+      "to": "pi",
+      "label": "64-byte frames",
+      "labelDy": 70
+    },
+    {
+      "from": "pi",
+      "to": "tx",
+      "label": "USB UART \u00b7 115200",
+      "variant": "emphasis"
+    },
+    {
+      "from": "tx",
+      "to": "rx",
+      "label": "437.5 MHz + Doppler",
+      "variant": "emphasis"
+    },
+    {
+      "from": "rx",
+      "to": "host",
+      "label": "USB UART \u00b7 RX_PACKET",
+      "variant": "emphasis",
+      "labelDy": 70
+    },
+    {
+      "from": "host",
+      "to": "display",
+      "label": "Local logs \u2192 HTTP"
+    },
+    {
+      "from": "pi",
+      "to": "logs",
+      "label": "TX_DONE + frame bytes",
+      "labelDy": 70
+    },
+    {
+      "from": "build",
+      "to": "tx",
+      "label": "HELLO identity check",
+      "labelDy": 70
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Send",
+      "items": [
+        "Validate frozen input and calculate frequency per frame",
+        "Confirm y, verify Nano B, then send three LoRa frames"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Receive",
+      "items": [
+        "Arm Nano A before starting the transmitter",
+        "Decode actual packets and compare them with the local reference"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Evidence",
+      "items": [
+        "TX_DONE records completion on the transmitting radio",
+        "Verify matching received bytes before declaring success"
+      ]
+    }
+  ]
+}

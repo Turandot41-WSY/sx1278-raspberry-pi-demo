@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>SX1278 receiver</title><link rel="stylesheet" href="/style.css"></head>
+<body><main><header><p class="eyebrow">RASPBERRY PI 5 → ANTENNA → MAC / WINDOWS</p><h1>Received over the air.</h1><p id="status" role="status">Connecting to the local receiver…</p></header>
+<section class="metrics" aria-label="Reception totals"><article><span>Packets observed</span><strong id="received">0</strong></article><article><span>Valid frames</span><strong id="valid">0</strong></article><article><span>Rejected frames</span><strong id="invalid">0</strong></article></section>
+<p id="origin">No receive session selected.</p><p id="warning" role="alert"></p>
+<section><h2>Latest decoded frame</h2><dl id="latest"><dt>Waiting</dt><dd>Start reception, then send three frames from the Pi.</dd></dl></section>
+<section><h2>Recent received frames</h2><p>Values appear only after a packet is recorded. Orbit time comes from its payload; it is not the current reception time.</p><div class="table-wrap"><table><thead><tr><th>Sample</th><th>Pass</th><th>Latitude</th><th>Longitude</th><th>Reference</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+<footer>Local receiver logs · 64-byte CCSDS frames · <a href="https://github.com/Turandot41-WSY/sx1278-raspberry-pi-demo">Reproduction guide</a></footer></main><script src="/app.js"></script></body></html>

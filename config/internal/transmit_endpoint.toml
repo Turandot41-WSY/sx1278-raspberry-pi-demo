@@ -1,0 +1,11 @@
+# Firmware build configuration for board A; after replacing the Nano, verify actual wiring before building and uploading.
+# The replacement board passed a bootloader handshake at 57600; transmission and reception results belong to the physical run logs.
+endpoint_id = 1 # Project assigned endpoint ID, range 1-4294967295; not a hardware serial number.
+board_label = "Replacement Nano ATmega328P; Ra-02" # Local device description for identification in build records.
+# Numbers below refer to Nano digital pins and must match the actual wiring; they are not Ra-02 pad numbers.
+nss_pin = 10
+reset_pin = 9
+dio0_pin = 2
+spi_hz = 100000 # SPI clock in Hz; the project currently selects 100 kHz.
+# The connected board passed a local handshake at 57600, selecting Old Bootloader; application UART remains 115200.
+fqbn = "arduino:avr:nano:cpu=atmega328old"

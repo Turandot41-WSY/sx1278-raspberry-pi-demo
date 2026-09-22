@@ -1,0 +1,5 @@
+# firmware/tools/check_avr_size.py
+[arguments]
+avr_size = ""
+elf = ""
+map_path = ""

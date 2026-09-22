@@ -1,0 +1,5 @@
+# firmware/tools/generate_build_identity.py
+[arguments]
+firmware_root = "firmware"
+output = "firmware/endpoint/src/generated/build_identity.h"
+check = false

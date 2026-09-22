@@ -1,0 +1,7 @@
+ProfileId,ProfileCode,Family,Modulation,CarrierHz,AllocatedBandwidthHz,RegBitRate,RegFdev,SpreadingFactor,CodingRateDenominator,ImplicitHeader,PreambleUnits,PreambleUnit,SyncWordHex,Whitening,PhyCrc,GaussianBt,RxBwRegister,NominalAirtimeMs,IdealApplicationGoodputKbps
+LoRa,0,LoRa,LoRa,437500000,125000,,,6,5,true,8,symbol,12,false,true,,,66.688,5.998
+FSK,1,FSK,FSK,437500000,125000,512,512,,,false,8,byte,1ACFFC1D,true,true,,3,9.984,40.064
+GFSK,2,FSK,GFSK,437500000,125000,512,512,,,false,8,byte,1ACFFC1D,true,true,0.5,3,9.984,40.064
+MSK,3,FSK,MSK,437500000,125000,400,328,,,false,8,byte,1ACFFC1D,true,true,,3,7.800,51.282
+GMSK,4,FSK,GMSK,437500000,125000,400,328,,,false,8,byte,1ACFFC1D,true,true,0.5,3,7.800,51.282
+OOK,5,FSK,OOK,437500000,125000,977,,,,false,8,byte,1ACFFC1D,true,true,,3,19.0515,20.996
