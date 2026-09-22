@@ -1,6 +1,6 @@
 # Public demo release verification
 
-Verified on 22 September 2026 using Python 3.12 in `sx1278-benchmark` on macOS ARM64. The final Git revision is recorded by `git rev-parse HEAD` in each reproduction clone.
+Verified on 22 September 2026 using Python 3.12 in `sx1278-benchmark` on macOS ARM64. Public source commit `a66b0d014293c16b2dd244bbb3d062b67f2e33eb` was cloned again from GitHub into an independent directory. That fresh clone passed all 143 tests, both Nano builds, and preparation of all 2,072 frames followed by cancellation before serial access. The documentation-only follow-up records these results. Use `git rev-parse HEAD` to save the revision of your own reproduction clone.
 
 | Check | Observed result | Scope |
 |---|---|---|
