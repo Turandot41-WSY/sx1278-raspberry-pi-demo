@@ -27,7 +27,7 @@ def test_display_decodes_selected_log_and_rejects_writes(tmp_path):
         assert snapshot['dataOrigin'] == 'synthetic'
         assert snapshot['activeLatest']['frameHex'] == frame.hex()
         assert snapshot['activeLatest']['sourceMatched'] is True
-        for asset in ('/monitor','/app.js','/style.css'):
+        for asset in ('/monitor','/editor.mjs','/style.css'):
             with urlopen(base+asset) as response:
                 assert response.status == 200
                 assert response.read()
@@ -60,3 +60,32 @@ def test_doppler_off_disables_dataset_override(tmp_path):
     assert values['saved_dataset'] == ''
     assert values['orbit_dataset'] == ''
     assert values['data_source'] == 'saved'
+
+
+def test_display_serves_approved_layout_and_its_assets(tmp_path):
+    """Require the approved dashboard and its assets through the production server."""
+    server = create_server(0, tmp_path, ROOT / 'data/replay/gomx1-example/orbit')
+    service = DisplayService(server)
+    service.start()
+    base = f'http://127.0.0.1:{server.server_port}'
+    try:
+        with urlopen(base + '/api/scene') as response:
+            scene = json.load(response)['scene']
+        assert scene['theme']['preset'] == 'lunar'
+        assert scene['samples'] == []
+        objects = {item['id']: item for item in scene['objects']}
+        assert objects['world-map']['map'] is True
+        assert objects['range-history-plot']['chart'] == 'range'
+        assert objects['doppler-history-plot']['chart'] == 'doppler'
+        assert objects['author-credit']['text'] == 'Author: Shiyi Wang'
+        assert not any(name.startswith('pipeline') for name in objects)
+        for name in ('itu-logo', 'lab-logo', 'spok-logo'):
+            with urlopen(base + '/' + objects[name]['src']) as response:
+                assert response.status == 200
+                assert response.read()
+        with urlopen(base + '/assets/world-countries.geojson') as response:
+            assert len(json.load(response)['features']) > 170
+        with urlopen(base + '/api/telemetry') as response:
+            assert json.load(response)['samples'] == []
+    finally:
+        service.close()

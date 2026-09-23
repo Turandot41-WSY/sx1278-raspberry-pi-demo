@@ -140,7 +140,7 @@ def create_server(port, receive_root, reference_dataset, events=None):
         `-- ThreadingHTTPServer
     """
     receiver = ReceiverStore(receive_root, reference_dataset, events)
-    scene = {}
+    scene = json.loads((WEB / 'approved-scene.json').read_text(encoding='utf-8'))
     server = ThreadingHTTPServer(('127.0.0.1', port), DisplayHandler)
     server.receiver = receiver
     server.scene = scene

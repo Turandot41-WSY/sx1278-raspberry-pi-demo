@@ -13,7 +13,7 @@ The setup uses Python 3.12 in the `sx1278-benchmark` Conda environment, Arduino 
 
 **Read in order:** [hardware](#1-hardware-and-wiring) → [Pi OS](#2-install-raspberry-pi-os--on-the-mac) → [network](#3-network-and-optional-bluetooth--on-the-pi) → [Pi tools](#4-install-tools--on-the-pi) → [receiver tools](#5-install-tools--on-the-receiver-computer) → [clone and environment](#6-clone-and-create-the-python-environment--both-computers) → [flash](#7-identify-configure-build-and-flash-each-board) → [receive and send](#8-first-reception-and-transmission) → [verify](#9-check-the-received-bytes) → [repeat](#10-repeat-with-20-frames-or-the-full-dataset).
 
-The [code architecture HTML](docs/architecture/architecture.html) and its [JSON source](docs/architecture/architecture.json) are included. GitHub displays HTML source; [section 13](#13-code-architecture-and-reading-order) explains how to view it locally.
+The architecture diagram records the initial package; its `web/app.js` label now corresponds to `web/editor.mjs`. The [code architecture HTML](docs/architecture/architecture.html) and its [JSON source](docs/architecture/architecture.json) are included. GitHub displays HTML source; [section 13](#13-code-architecture-and-reading-order) explains how to view it locally.
 
 ## 1. Hardware and wiring
 
@@ -384,7 +384,9 @@ Wait for `RX_ARMED`. Empty windows print `RX_TIMEOUT` and reopen; this is normal
 
 **http://127.0.0.1:8878/monitor**
 
-The page reads the current session's real packet log. It shows valid frame counts, decoded positions, raw frame bytes and exact reference matching. RSSI/SNR values are labeled raw because the display does not convert them to calibrated measurements. The local HTTP service does not transport the radio frames between computers.
+The page reads the current session's real packet log. It uses the same approved Lunar White dashboard as the full project: IT:U, S3 Lab and SPOK Space Lab logos with the author credit, a regional orbit map, received telemetry, and slant range and model Doppler plots. Only valid received frames add points; earlier received passes remain visible. The source and frame dialog shows frame counts, raw frame bytes and exact reference matching. RSSI/SNR values are labeled raw because the display does not convert them to calibrated measurements. The local HTTP service does not transport the radio frames between computers.
+
+The [dashboard preview and verification record](docs/frontend/README.md) show the restored layout.
 
 ### Prepare without sending — Pi
 
@@ -517,7 +519,7 @@ Read the actual implementation in this order:
 | UART | [`serial_transport.py`](host/radio/serial_transport.py), [`serial_protocol.py`](host/radio/serial_protocol.py) | COBS framing, serial CRC, identities, command/event validation and timeouts |
 | Firmware | [`endpoint.ino`](firmware/endpoint/endpoint.ino), [`sx1278_driver.cpp`](firmware/endpoint/src/sx1278_driver.cpp) | Parse Nano commands and operate the radio through SPI |
 | Receiver | [`receive_saved.py`](host/cli/receive_saved.py), [`single_receive.py`](host/radio/single_receive.py) | Arm independent windows and preserve actual packet bytes |
-| Browser | [`receiver.py`](host/display/receiver.py), [`server.py`](host/display/server.py), [`web/app.js`](web/app.js) | Validate log frames, decode positions and serve local telemetry |
+| Browser | [`receiver.py`](host/display/receiver.py), [`server.py`](host/display/server.py), [`web/editor.mjs`](web/editor.mjs) | Validate log frames, decode positions and serve local telemetry |
 | Build tools | [`board_control.py`](firmware/tools/board_control.py), [`build_single_endpoint.py`](firmware/tools/build_single_endpoint.py) | Find tools, compile identity-bound firmware and upload with verification |
 | Offline comparison | [`verify_reception.py`](tools/verify_reception.py) | Match completed transmit requests to CRC-valid received bytes |
 
