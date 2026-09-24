@@ -541,4 +541,8 @@ The receiver reuses the setup function named `configure_transmitter`; this sets 
 
 See [the release verification record](docs/validation.md) for the actual checks performed. Software tests, AVR compilation and browser checks can run without connected hardware. They do not establish a Raspberry Pi 5 physical RF result. Complete the checks in sections 7–9 on your assemblies and preserve their logs.
 
-The public repository includes only the independent antenna workflow, its firmware, data preparation, display and relevant tests. Generated binaries, local settings secrets and experimental output are excluded from version control. Public input attribution is retained in the [archive README](data/replay/gomx1-example/README.md) and its source manifests.
+The public repository includes only the independent antenna workflow, its firmware, data preparation, display and relevant tests.
+
+The Pi stores its own transmit log; the Mac or Windows receiver stores its receive log and serves its local browser. The receiver sends no logs or radio commands back to the Pi. Optional transfer of the completed transmit log to the receiver supports the exact-byte check in section 9. MATLAB processing, statistical experiment analysis and remote control of receiver UARTs are outside this public distribution.
+
+Generated binaries, local settings secrets and experimental output are excluded from version control. Public input attribution is retained in the [archive README](data/replay/gomx1-example/README.md) and its source manifests.

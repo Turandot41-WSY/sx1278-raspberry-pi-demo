@@ -144,13 +144,12 @@ def test_receive_callback_runs_only_after_valid_armed(fault):
 
 
 @pytest.mark.parametrize('device', ['COM4', '/dev/cu.usbserial-110', '/dev/ttyUSB0'])
-def test_antenna_main_needs_only_local_uart_without_token(tmp_path, monkeypatch, device):
+def test_antenna_main_uses_local_uart_on_each_platform(tmp_path, monkeypatch, device):
     """Send exact saved frames through one local UART on all operator platforms.
 
     Direct call tree (static source order):
-        test_antenna_main_needs_only_local_uart_without_token
+        test_antenna_main_uses_local_uart_on_each_platform
         +-- session_for
-        +-- monkeypatch.delenv
         +-- monkeypatch.setattr
         +-- Mock
         +-- patch.object
@@ -167,7 +166,6 @@ def test_antenna_main_needs_only_local_uart_without_token(tmp_path, monkeypatch,
     from tests.fakes.transmit_endpoint import SimulatedTransmitEvidence
 
     source, session = session_for(tmp_path, 'LoRa')
-    monkeypatch.delenv('SAS2027_RECEIVER_TOKEN', raising=False)
     monkeypatch.setattr('builtins.input', Mock(return_value='yes'))
     opened = Mock(return_value=session.port)
     with patch.object(transmit_saved, 'open_nano_port', opened), \

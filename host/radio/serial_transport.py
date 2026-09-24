@@ -385,7 +385,7 @@ def _require_expect_types(expect: set[MessageType]) -> None:
             raise TypeError("each expected response must be a MessageType")
 
 
-def open_nano_port(device: str, *, token: str | None = None) -> Serial | NanoPort:
+def open_nano_port(device: str) -> Serial | NanoPort:
     """Open the local Nano UART for independent antenna operation.
 
     References:
