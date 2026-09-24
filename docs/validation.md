@@ -1,26 +1,27 @@
-# Public demo release verification
+# Demo verification record
 
-Verified on 22 September 2026 using Python 3.12 in `sx1278-benchmark` on macOS ARM64. Public source commit `a66b0d014293c16b2dd244bbb3d062b67f2e33eb` was cloned again from GitHub into an independent directory. That fresh clone passed all 143 tests, both Nano builds, and preparation of all 2,072 frames followed by cancellation before serial access. The documentation-only follow-up records these results. Use `git rev-parse HEAD` to save the revision of your own reproduction clone.
+Verified on 24 September 2026 using Python 3.12 in `sx1278-benchmark` on macOS ARM64. Record the exact public revision of a reproduction with `git rev-parse HEAD`.
+
+## Current scope
+
+The public demo contains local antenna transmission, reception, input preparation, Nano firmware, log comparison and architecture documentation. The current maintained radio/data/firmware sources were compared before this update. Their common implementations remain aligned; public entry points and configuration deliberately expose only the antenna workflows.
+
+The documented pairs are Pi 5 → Mac, Pi 5 → Windows, Windows → Mac and Windows → Windows. Role configuration tests exercise all four device/identity combinations. These tests do not constitute execution on those operating systems or physical RF validation.
+
+## Checks performed
 
 | Check | Observed result | Scope |
 |---|---|---|
-| Python test suite | 143 passed | Protocol, serial transport, frame preparation, firmware staging, display HTTP integration, exact reception comparison and configuration |
-| Dependency installation and `pip check` | Passed | Installed snapshot in the development environment |
-| Linux ARM64 / Python 3.12 wheel resolution | 12 packages resolved | Binary package availability; no Pi installation or execution implied |
-| Windows x86-64 / Python 3.12 wheel resolution | 13 packages resolved, including colorama | Binary package availability; no Windows execution implied |
-| Nano A compile | Passed; flash 19,826 bytes, static RAM 1,521 bytes | Arduino CLI 1.5.1, AVR Boards 1.8.8, old Nano bootloader target |
-| Nano B compile | Passed; flash 19,826 bytes, static RAM 1,521 bytes | Same toolchain; separate endpoint identity and manifest |
-| Full archive preparation | 2,072 frames prepared, then cancelled before sending | Offline archive validation, frame reconstruction and Doppler planning |
-| CLI help | Seven entry/action help commands passed | Imports and argument parsing |
-| README | Bash syntax and local links checked | PowerShell instructions reviewed but not executed on Windows |
-| Architecture HTML | 9/9 showcase checks, no errors or warnings | Deterministic artifact validation; see its delivery receipt |
-| Architecture browser | Containment passed at 1440×900, 1600×1000, 1920×1080 and 2048×1320 | Automated Chrome checks; light/dark screenshots retained |
-| Architecture visual review | Light 1440×900 and dark 2048×1320 screenshots inspected | Labels, routes and cards visible; one layout correction round |
-| Receiver page | HTTP assets, read-only API, decoded synthetic fixture and empty state passed | Synthetic fixture explicitly labeled; no physical reception inferred |
-| Receiver browser | Empty session shows zero packets and no fabricated rows | Headless browser; temporary session and processes closed |
+| Python suite | 149 passed | Serial protocol, independent TX/RX, data validation, firmware staging, four platform role configurations and log comparison |
+| Scope regression | Passed | Receiver exposes only `listen`; browser runtime/assets and display configuration are absent |
+| Python dependencies | `pip check` passed | Existing pinned dependency snapshot; no new dependencies |
+| Full archive preparation | 2,072 frames prepared, then cancelled before UART | Frozen inputs, frame reconstruction and frequency plan |
+| CLI help | Six entry/tool help commands passed | Imports and argument parsing |
+| Setup/README checks | 17 Bash blocks and 115 local Markdown links passed | Bash syntax and local destinations; PowerShell was not executed on Windows |
+| Architecture validation | 9/9 showcase, no errors or warnings | Deterministic HTML/specification validation |
+| Architecture browser | Passed at 1440×900, 1600×1000, 1920×1080 and 2048×1320 | Automated containment and screenshot evidence |
+| Architecture review | 1440 light and 2048 dark screenshots inspected | Current TX/RX diagram, no operational display component |
 
-The build tool stages production firmware under the ignored `firmware/build/` directory. Compilation did not upload firmware, open a serial port, or radiate RF. The receiver browser check used an empty local log root. Its HTTP server has been stopped.
+The endpoint firmware and board configuration bytes are unchanged from the preceding verified release, which compiled both Nano targets with Arduino CLI 1.5.1 and AVR Boards 1.8.8 (19,826 bytes flash; 1,521 bytes static RAM). The 22 September release also resolved binary Python packages for Linux ARM64 and Windows x86-64; package availability is not a hardware or OS execution result.
 
-The operator must still verify the actual Pi's USB permissions, bootloader handshake, successful flash verification, radio register readback and matching physical received bytes. Those results should be saved with the run's exact code revision, TX log, RX log and configuration snapshots. They are not claimed by this software release.
-
-The archive is calculated orbital telemetry from public source data. Tests and archive reconstruction do not establish an on-air satellite measurement, calibrated RF power, or a packet error rate experiment.
+No serial port was opened, no Nano was uploaded, and no RF was transmitted during this update. Run the [experiment checks](experiments/README.md) on your assemblies and retain the original logs. Actual USB permissions, bootloader, supply/wiring, radio register readback and received byte matches remain physical operator checks.

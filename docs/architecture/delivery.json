@@ -6,12 +6,12 @@
   "input": "docs/architecture/architecture.json",
   "output": "docs/architecture/architecture.html",
   "specification": {
-    "sha256": "209446e35f2b9a102e10a02fe2cc3af7f3266832b39c3b0725215da95d777d9f",
-    "bytes": 3624
+    "sha256": "9d731a7109e216039b8906d99cac3d3d89a02fe597687fb401450dec6b56b084",
+    "bytes": 3746
   },
   "artifact": {
-    "sha256": "d6d0faee793b15c2787d326bd215a3193af93e6bd1d4ea1a4448459ec73c1830",
-    "bytes": 710354
+    "sha256": "4772bb76318cb1e6bd15c8e0c722b339a0f660d4132bdcad98a63557dbee1615",
+    "bytes": 710390
   },
   "validation": {
     "checksPassed": 9,

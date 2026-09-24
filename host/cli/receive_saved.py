@@ -1,10 +1,10 @@
 """Capture radio packets on a local Nano independently of the sending computer.
 
 Call tree:
-run -> validate settings/build -> preserve configuration -> optional exact-session display -> open_nano_port
+run -> validate settings/build -> preserve configuration -> open_nano_port
     -> configure_transmitter [shared identity/profile/PA setup; no START_TX]
     -> receive_window [ARM_RX -> RX_ARMED -> RX_PACKET/RX_TIMEOUT]
-    -> record exact packet bytes and host time -> close UART, evidence and display
+    -> record exact packet bytes and host time -> close UART, evidence
 """
 
 import argparse
@@ -19,7 +19,6 @@ from host.radio.profile_truth import load_profile_truth
 from host.radio.serial_transport import EndpointTransport, SystemClock, open_nano_port
 from host.radio.single_transmit import TransmitEvidence, configure_transmitter
 from host.radio.single_receive import receive_window
-from host.cli.receive_display import start_for_capture
 
 
 def run(arguments=None) -> int:
@@ -31,7 +30,7 @@ def run(arguments=None) -> int:
     by the existing firmware. These observations are diagnostic capture evidence.
 
     Processing flow:
-        Validate settings and build -> snapshot configuration -> optional display -> settle UART
+        Validate settings and build -> snapshot configuration -> settle UART
         -> verify identity/registers -> repeat receive windows -> summarize/close.
         Ctrl+C ends capture; a protocol failure records INCOMPLETE and stops.
 
@@ -58,7 +57,6 @@ def run(arguments=None) -> int:
         +-- secrets.randbelow
         +-- print
         +-- evidence.record
-        +-- start_for_capture
         +-- open_nano_port
         +-- clock.sleep_ms
         +-- port.reset_input_buffer
@@ -70,8 +68,7 @@ def run(arguments=None) -> int:
         +-- time.time_ns
         +-- repr
         +-- port.close
-        +-- evidence.close
-        `-- display.close
+        `-- evidence.close
     """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--device", required=True)
@@ -82,7 +79,6 @@ def run(arguments=None) -> int:
     parser.add_argument("--timeout-ms", type=int, default=2000)
     parser.add_argument("--boot-settle-ms", type=int, default=2500)
     parser.add_argument("--max-windows", type=int, default=0)
-    parser.add_argument("--display", action=argparse.BooleanOptionalAction, default=False)
     options = parse_configured_args(parser, arguments, "main_receive", section="listen")
     if options.device.startswith("tcp://"):
         parser.error("listen requires a local UART, for example COM4")
@@ -118,7 +114,6 @@ def run(arguments=None) -> int:
     timeouts = 0
     status = "COMPLETED"
     exit_code = 0
-    display = None
     print(f"Evidence: {directory}", flush=True)
     try:
         evidence.record("run_start", data_origin="physical_serial", purpose="diagnostic_capture",
@@ -126,8 +121,6 @@ def run(arguments=None) -> int:
                         rx_window_ms=options.rx_window_ms, timeout_ms=options.timeout_ms,
                         boot_settle_ms=options.boot_settle_ms, max_windows=options.max_windows,
                         nominal_reg_frf_word=0x6D6000)
-        if options.display:
-            display = start_for_capture(options.settings, directory)
         port = open_nano_port(options.device)
         clock.sleep_ms(options.boot_settle_ms)
         port.reset_input_buffer()
@@ -165,6 +158,4 @@ def run(arguments=None) -> int:
             evidence.record("summary", status=status, completed_windows=windows,
                             rx_packets=packets, rx_timeouts=timeouts)
             evidence.close()
-            if display is not None:
-                display.close()
     return exit_code

@@ -1,4 +1,4 @@
-"""Keep the public demo limited to local radio operation and display."""
+"""Keep the public demo limited to local radio operation and architecture documentation."""
 
 import ast
 from pathlib import Path
@@ -17,7 +17,7 @@ def test_public_entry_points_and_host_modules_stay_within_demo_scope():
         path.name for path in (ROOT / 'host').iterdir()
         if path.is_dir() and path.name != '__pycache__'
     }
-    assert host_modules == {'cli', 'common', 'dataset', 'display', 'radio'}
+    assert host_modules == {'cli', 'common', 'dataset', 'radio'}
     for directory in ('host', 'tools', 'config', 'firmware'):
         for path in (ROOT / directory).rglob('*'):
             if not path.is_file() or '__pycache__' in path.parts or 'build' in path.parts:
@@ -28,8 +28,8 @@ def test_public_entry_points_and_host_modules_stay_within_demo_scope():
 
 
 def test_radio_and_operator_modules_do_not_import_network_control():
-    """Keep UART operation local while allowing the separate browser HTTP service."""
-    prohibited = {'socket', 'socketserver', 'paramiko', 'matlab', 'scipy', 'pandas', 'matplotlib'}
+    """Keep UART operation local without a browser HTTP service."""
+    prohibited = {'socket', 'socketserver', 'http', 'paramiko', 'matlab', 'scipy', 'pandas', 'matplotlib'}
     for directory in ('host/radio', 'host/cli', 'tools'):
         for path in (ROOT / directory).rglob('*.py'):
             tree = ast.parse(path.read_text(encoding='utf-8'), filename=str(path))
@@ -51,3 +51,18 @@ def test_public_dependencies_exclude_private_analysis_and_remote_control():
         if line.strip() and not line.lstrip().startswith('#'):
             names.add(re.split(r'[<>=!~;\s\[]', line.strip(), maxsplit=1)[0].lower())
     assert not names & {'matlabengine', 'matlab', 'scipy', 'pandas', 'matplotlib', 'paramiko'}
+
+
+def test_receiver_has_no_display_configuration_or_runtime_assets():
+    """Reject removed display actions, settings, assets and imports."""
+    import tomllib
+    config = tomllib.loads((ROOT / 'config/main_receive.toml').read_text())
+    assert set(config) == {'action', 'listen'}
+    assert 'display' not in config['listen']
+    for name in ('web', 'FrontWeb', 'host/display', 'host/cli/receive_display.py', 'docs/frontend'):
+        assert not (ROOT / name).exists(), name
+    import subprocess
+    import sys
+    result = subprocess.run([sys.executable, 'main_receive.py', '--help'], cwd=ROOT, capture_output=True, text=True)
+    assert result.returncode == 0
+    assert '--display' not in result.stdout

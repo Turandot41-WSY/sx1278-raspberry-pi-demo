@@ -1,5 +1,5 @@
 # The sole operator configuration for main_transmit.py. Both the terminal and F5 read this file.
-# Raspberry Pi 5 sends independently over antennas to a local receiver on another computer.
+# Raspberry Pi 5 or Windows sends independently over antennas to a local receiver on another computer.
 # saved retains the explicit frame file path used by software tests.
 # All paths are relative to the project root; an empty string means unconfigured. Ordinary antenna tests use [antenna].
 action = "antenna"
@@ -15,7 +15,7 @@ data_source = "saved"
 # Leave empty to use the existing frame file settings below. latest ignores this field. Supply a directory path, not a single bin file.
 saved_dataset = "data/replay/gomx1-example/orbit"
 
-# Serial port of the transmitting board on the Pi; verify the actual port after reconnecting.
+# Serial port of the transmitting board on the sending computer; verify the actual port after reconnecting.
 port = "/dev/ttyUSB0"
 
 # Existing frame file: required only when data_source=saved and saved_dataset is empty; frames must correspond to orbit samples in order.

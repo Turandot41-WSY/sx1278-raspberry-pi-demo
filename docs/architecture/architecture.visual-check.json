@@ -7,8 +7,8 @@
   "visualReview": "pending",
   "artifact": {
     "path": "docs/architecture/architecture.html",
-    "sha256": "d6d0faee793b15c2787d326bd215a3193af93e6bd1d4ea1a4448459ec73c1830",
-    "bytes": 710354
+    "sha256": "4772bb76318cb1e6bd15c8e0c722b339a0f660d4132bdcad98a63557dbee1615",
+    "bytes": 710390
   },
   "state": {
     "detail": "read",
@@ -95,8 +95,8 @@
         "overflowX": false,
         "overflowY": false,
         "ok": true,
-        "readerWidth": 1437,
-        "diagramWidth": 1407,
+        "readerWidth": 1468,
+        "diagramWidth": 1438,
         "viewBoxWidth": 1300,
         "minimumProjectedNodeTextPx": 9,
         "minimumProjectedNodeText": "orbit_dataset.py",
@@ -225,8 +225,8 @@
         "overflowX": false,
         "overflowY": false,
         "ok": true,
-        "readerWidth": 1437,
-        "diagramWidth": 1407,
+        "readerWidth": 1468,
+        "diagramWidth": 1438,
         "viewBoxWidth": 1300,
         "minimumProjectedNodeTextPx": 9,
         "minimumProjectedNodeText": "orbit_dataset.py",
@@ -354,8 +354,8 @@
         "overflowX": false,
         "overflowY": false,
         "ok": true,
-        "readerWidth": 1437,
-        "diagramWidth": 1407,
+        "readerWidth": 1468,
+        "diagramWidth": 1438,
         "viewBoxWidth": 1300,
         "minimumProjectedNodeTextPx": 9,
         "minimumProjectedNodeText": "orbit_dataset.py",

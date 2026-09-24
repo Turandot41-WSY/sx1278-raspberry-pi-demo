@@ -18,12 +18,13 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 COMMAND_SETTINGS = {
     "dataset": ("main_dataset", "acquire"),
     "transmit": ("main_transmit", "saved"),
+    "receive": ("main_receive", "listen"),
 }
 
 ENTRY_TABLES = {
     "main_dataset": {"action", "acquire", "orbit_model"},
     "main_transmit": {"action", "antenna", "saved"},
-    "main_receive": {"action", "listen", "display"},
+    "main_receive": {"action", "listen"},
 }
 
 

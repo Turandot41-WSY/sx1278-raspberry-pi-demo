@@ -1,4 +1,4 @@
-"""Send saved or freshly acquired orbit frames from the Raspberry Pi 5."""
+"""Send saved or freshly acquired orbit frames from Raspberry Pi 5 or Windows."""
 
 from host.cli.dispatch import select_action
 from host.cli import transmit_antenna, transmit_saved

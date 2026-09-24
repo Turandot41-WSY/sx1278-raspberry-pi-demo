@@ -1,15 +1,26 @@
 # Operator configuration
 
-The full installation and operating procedure is in the [root README](../README.md).
+[Repository overview](../README.md) · [Experiment guide](../docs/experiments/README.md)
 
-| Entry | Default action and section | Output |
+Each real entry owns one TOML file. The top-level `action` selects its section; explicit command-line flags override only the current run. Save edits, stop the previous process and restart it.
+
+| Entry | Configuration | Action and section | Output |
+|---|---|---|---|
+| `main_transmit.py` | `main_transmit.toml` | `antenna` / `[antenna]`; explicit file alternative `saved` / `[saved]` | `output/antenna-doppler/<UTC>` or `output/transmit/<UTC>` |
+| `main_receive.py` | `main_receive.toml` | `listen` / `[listen]` | `output/receive/<UTC>` |
+| `main_dataset.py` | `main_dataset.toml` | `acquire` / `[acquire]` and `[orbit_model]` | `data/orbit/` |
+
+Every field has an English explanation next to its value. Paths are relative to the repository root unless absolute. Use forward slashes in Windows TOML paths, for example `C:/Users/me/data/orbit`.
+
+The role helper writes the selected host device and manifest into the appropriate operator file and `internal/board_control.toml`. Use B TX/A RX on every supported platform pair. The actual device is `/dev/ttyUSB0` or similar on Pi, `/dev/cu.*` on Mac, and `COMn` on Windows.
+
+| Identity | Board TOML | Build output |
 |---|---|---|
-| `main_transmit.py` | `antenna` / `[antenna]` | `output/antenna-doppler/<UTC>` |
-| `main_receive.py` | `listen` / `[listen]`, optional `[display]` | `output/receive/<UTC>` |
-| `main_dataset.py` | `acquire` / `[acquire]`, `[orbit_model]` | `data/orbit/` |
+| A / endpoint 1 | `internal/transmit_endpoint.toml` | `firmware/build/single-endpoint` |
+| B / endpoint 2 | `internal/receive_endpoint.toml` | `firmware/build/receive-endpoint` |
 
-Terminal and debugger read the same top-level `action`. A CLI override applies to that run only. The role helper saves selected values to these TOML files and `internal/board_control.toml`. Every operator field is explained next to its value.
+These historical filenames identify physical boards independently of their runtime roles. Both compile `firmware/endpoint/endpoint.ino`. Editing a board file, including comments, changes its identity hash; rebuild and upload, then retain the matching manifest. A new manifest cannot describe an old installed image.
 
-Board A is endpoint 1 (`internal/transmit_endpoint.toml`); board B is endpoint 2 (`internal/receive_endpoint.toml`). The historical filenames identify physical boards, independently of the current role. For this demo B sends from the Pi and A receives on Mac/Windows.
+In `[antenna]`, a nonempty `saved_dataset` takes precedence over the explicit `frames`/`sha256`/`orbit_dataset` input. `data_source = "latest"` acquires before preparing frames. Start with the bundled saved dataset and three LoRa frames. See [Dataset preparation](../docs/datasets/README.md).
 
-Board files, including their comments, participate in build identity. After editing them, build, upload, and use the matching manifest. A new manifest cannot describe an older installed firmware image. Generated firmware build directories are intentionally ignored by Git.
+`profiles.csv`, `pa_settings.csv` and `profile_registers.csv` define compiled radio settings. Firmware tools generate the tables and build identity from them. Profile selection at runtime requires the same compiled tables at both ends.

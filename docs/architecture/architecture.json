@@ -2,7 +2,7 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "Raspberry Pi 5 antenna demo",
+    "title": "SX1278 antenna transmission and reception",
     "locale": "en",
     "quality_profile": "showcase",
     "viewBox": [
@@ -28,7 +28,7 @@
     {
       "id": "pi",
       "type": "backend",
-      "label": "Raspberry Pi 5",
+      "label": "Pi 5 / Windows",
       "sublabel": "main_transmit.py",
       "pos": [
         50,
@@ -82,10 +82,10 @@
       ]
     },
     {
-      "id": "display",
-      "type": "frontend",
-      "label": "Receiver display",
-      "sublabel": "server.py \u00b7 web/app.js",
+      "id": "compare",
+      "type": "backend",
+      "label": "Compare TX / RX",
+      "sublabel": "verify_reception.py",
       "pos": [
         500,
         515
@@ -152,8 +152,8 @@
     },
     {
       "from": "host",
-      "to": "display",
-      "label": "Local logs \u2192 HTTP"
+      "to": "compare",
+      "label": "RX events.jsonl"
     },
     {
       "from": "pi",
@@ -166,31 +166,36 @@
       "to": "tx",
       "label": "HELLO identity check",
       "labelDy": 70
+    },
+    {
+      "from": "logs",
+      "to": "compare",
+      "label": "TX events.jsonl"
     }
   ],
   "cards": [
     {
       "dot": "cyan",
-      "title": "Send",
+      "title": "Prepare and send",
       "items": [
-        "Validate frozen input and calculate frequency per frame",
-        "Confirm y, verify Nano B, then send three LoRa frames"
+        "Validate archived frames and calculate frequency per frame",
+        "Confirm y; the local Nano B sends the selected payloads"
       ]
     },
     {
       "dot": "emerald",
-      "title": "Receive",
+      "title": "Receive and retain",
       "items": [
-        "Arm Nano A before starting the transmitter",
-        "Decode actual packets and compare them with the local reference"
+        "Start Nano A reception before the transmitter",
+        "Record RX_PACKET bytes, CRC status and raw radio metrics"
       ]
     },
     {
       "dot": "amber",
-      "title": "Evidence",
+      "title": "Verify the experiment",
       "items": [
-        "TX_DONE records completion on the transmitting radio",
-        "Verify matching received bytes before declaring success"
+        "TX_DONE proves completion at the transmitting radio",
+        "Compare received bytes with the completed TX requests"
       ]
     }
   ]
