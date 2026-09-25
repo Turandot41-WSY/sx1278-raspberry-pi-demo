@@ -1,6 +1,6 @@
 # Keep source/configuration bytes stable across Windows, macOS and Linux.
 * text=auto eol=lf
 # Archive hashes bind the original provider and derived file bytes.
-data/replay/** -text -diff
+dataset/data/replay/** -text -diff
 *.bin binary
 *.png binary

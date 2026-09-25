@@ -1,8 +1,8 @@
 """Enforce the frozen Arduino Nano firmware resource budget.
 
-Configuration: config/internal/avr_size.toml
+Configuration: firmware/config/internal/avr_size.toml
 Function call tree (main task paths; branch labels indicate execution conditions):
-main() -> host.common.runtime_config.parse_configured_args() Read avr_size.toml
+main() -> firmware.host.runtime_config.parse_configured_args() Read avr_size.toml
 +-- _validate_map()                          Check the ELF file against the linker map
 +-- _validate_tool_version()                  Check the avr-size version
 +-- _measure_elf_sections()                   Read ELF section sizes
@@ -26,7 +26,7 @@ import sys
 _REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(_REPOSITORY_ROOT))
 
-from host.common.runtime_config import parse_configured_args
+from firmware.host.runtime_config import parse_configured_args
 from typing import Sequence
 
 

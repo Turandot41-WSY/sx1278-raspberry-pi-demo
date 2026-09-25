@@ -384,7 +384,7 @@ def run(arguments=None) -> int:
         `-- execute_plan
     """
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--settings", type=Path, default=ROOT / "config/internal/board_control.toml")
+    parser.add_argument("--settings", type=Path, default=ROOT / "firmware/config/internal/board_control.toml")
     parser.add_argument("--action", choices=ACTIONS)
     parser.add_argument("--baud", type=int, choices=(57600, 115200))
     parser.add_argument("--dry-run", action="store_true")

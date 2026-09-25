@@ -1,8 +1,8 @@
 """Generate a non-self-referential SHA-256 identity for firmware sources.
 
-Configuration: config/internal/build_identity.toml
+Configuration: firmware/config/internal/build_identity.toml
 Function call tree (main task paths; branch labels indicate execution conditions):
-main() -> host.common.runtime_config.parse_configured_args() Read build_identity.toml
+main() -> firmware.host.runtime_config.parse_configured_args() Read build_identity.toml
 `-- generate_build_identity()                Generate or verify the firmware source identity
     +-- build_identity()                     Compute SHA-256 over source paths and bytes
     |   `-- source_paths()                    Collect source files in a fixed order
@@ -18,7 +18,7 @@ import sys
 _REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(_REPOSITORY_ROOT))
 
-from host.common.runtime_config import parse_configured_args
+from firmware.host.runtime_config import parse_configured_args
 
 
 def source_paths(firmware_root: Path) -> list[Path]:

@@ -1,10 +1,10 @@
 """Generate bounded AVR headers from the single reviewed profile truth.
 
-Configuration: config/internal/firmware_tables.toml
+Configuration: firmware/config/internal/firmware_tables.toml
 Function call tree (main task paths; branch labels indicate execution conditions):
-main() -> host.common.runtime_config.parse_configured_args() Read firmware_tables.toml
+main() -> firmware.host.runtime_config.parse_configured_args() Read firmware_tables.toml
 `-- generate_tables()                        Generate configuration tables for the firmware
-    +-- host.radio.profile_truth.load_profile_truth() Load profile, PA, and register CSV tables
+    +-- firmware.host.profile_truth.load_profile_truth() Load profile, PA, and register CSV tables
     +-- load_register_review()                Validate the register review record
     +-- read_endpoints()                      Load endpoint identities and pin definitions
     +-- emit_profile_header()                 Generate modulation settings
@@ -24,8 +24,8 @@ from pathlib import Path
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPOSITORY_ROOT))
 
-from host.common.runtime_config import parse_configured_args
-from host.radio.profile_truth import (
+from firmware.host.runtime_config import parse_configured_args
+from firmware.host.profile_truth import (
     PROFILE_ORDER,
     ProfileTruth,
     ProfileTruthError,

@@ -1,6 +1,6 @@
 """Build the production endpoint for one operator-configured Nano.
 
-Reads config/internal/transmit_endpoint.toml and copies production sources into an isolated
+Reads firmware/config/internal/transmit_endpoint.toml and copies production sources into an isolated
 build directory. Only generated configuration/identity headers differ. No probe
 sketch or alternate radio implementation is compiled. This tool never uploads.
 
@@ -180,7 +180,7 @@ def main(arguments=None) -> int:
         `-- print
     """
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", type=Path, default=ROOT / "config/internal/transmit_endpoint.toml")
+    parser.add_argument("--config", type=Path, default=ROOT / "firmware/config/internal/transmit_endpoint.toml")
     parser.add_argument("--build", type=Path, default=ROOT / "firmware/build/single-endpoint")
     parser.add_argument("--arduino-cli", default=CLI)
     parser.add_argument("--avr-size", default=str(Path.home() / "Library/Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin/avr-size"))

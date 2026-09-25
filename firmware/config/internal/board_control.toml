@@ -1,0 +1,25 @@
+# Board maintenance entry: python firmware/tools/board_control.py. VS Code Terminal > Run Task also uses this file.
+# This device maintenance tool is separate from the experiment main entries. Close send, receive and monitor processes that own the port first.
+# Paths may be absolute or relative to the repository root. Use forward slashes on Windows, e.g. C:/Users/me/Arduino15.
+action = "ports" # Default action, no units: ports lists ports, handshake checks communication, build compiles, upload writes and verifies flash.
+device = "" # Serial port required for handshake/upload, e.g. COM3 or /dev/cu.usbserial-110. Port names do not identify the bootloader.
+board_config = "firmware/config/internal/transmit_endpoint.toml" # Board TOML path containing FQBN, pins, ID and SPI settings; use transmit_endpoint.toml for board A.
+
+build_dir = "firmware/build/single-endpoint" # Build output directory; upload reads its manifest and HEX. Board A normally uses firmware/build/single-endpoint.
+
+output = "output/board-control" # Command evidence directory; each run creates a UTC subdirectory/result.json. This is not evidence of successful radio communication.
+
+handshake_baud = 0 # Bootloader handshake rate in baud: 0 derives it from the board_config FQBN, or select 57600/115200. Affects handshake only, not upload settings.
+
+command_timeout_seconds = 120 # Maximum duration per external command in positive integer seconds; use 300 for slower builds. A timeout does not establish board damage.
+
+arduino_data_dir = "" # Arduino15 directory; empty selects the OS default: LOCALAPPDATA/Arduino15 on Windows, ~/Library/Arduino15 on macOS, ~/.arduino15 on Linux.
+
+# Empty tool paths use CLI discovery through PATH or known Arduino IDE/AVR Boards 1.8.8 installation layouts.
+# For other versions or locations, provide the paths below. This tool does not install software or change the board type automatically.
+
+[tools]
+arduino_cli = "" # Arduino CLI executable, e.g. C:/Program Files/Arduino IDE/resources/app/lib/backend/resources/arduino-cli.exe.
+avrdude = "" # AVRDUDE executable, e.g. Arduino15/packages/arduino/tools/avrdude/8.0.0-arduino1/bin/avrdude.exe.
+avrdude_config = "" # AVRDUDE configuration matching that version, typically etc/avrdude.conf; distinct from the experiment board TOML.
+avr_size = "" # AVR size tool, e.g. Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin/avr-size.exe.

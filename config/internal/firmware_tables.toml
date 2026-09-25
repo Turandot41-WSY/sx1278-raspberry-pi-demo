@@ -1,6 +1,0 @@
-# firmware/tools/generate_firmware_tables.py
-[arguments]
-config = "config"
-output = "firmware/endpoint/src/generated"
-check = false
-require_production = false
