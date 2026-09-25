@@ -73,8 +73,8 @@ Changing firmware source, a board file, or compiled tables requires a new build 
 
 | Symptom | Action |
 |---|---|
-| `arduino-cli` missing | Extract the official archive, put the executable on PATH and reopen the terminal; check `arduino-cli version` |
-| AVR build tools missing | Check that `arduino-cli core list` includes `arduino:avr` 1.8.8 |
+| `arduino-cli` missing | Extract the official archive and verify the executable. On Windows, follow [manual tool discovery and TOML configuration](../setup/windows/README.md#find-tools-and-set-their-paths-manually) |
+| AVR build tools missing | Check that `core list` includes `arduino:avr` 1.8.8; the [Windows guide](../setup/windows/README.md#find-tools-and-set-their-paths-manually) shows how to locate `avrdude.exe`, `avrdude.conf` and `avr-size.exe` and save their paths |
 | Index download stalls | Check HTTPS access; run `arduino-cli core update-index --verbose` to inspect progress |
 | Build timeout | Set `command_timeout_seconds = 300` in `firmware/config/internal/board_control.toml`, then rebuild |
 | Serial port missing | Check USB enumeration and a data cable; enumerate with `python -m serial.tools.list_ports -v` |

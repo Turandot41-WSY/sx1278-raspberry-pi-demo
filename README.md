@@ -22,6 +22,8 @@ Send saved telemetry through two Arduino Nano and Ra-02/SX1278 assemblies, captu
 
 Each computer controls its own Nano through USB UART at 115200 baud. Each Nano controls its SX1278 through SPI. The two radios exchange frames through antennas; the computers need no network connection to each other during a trial with saved data. Serial port names belong to the local computer, so two Windows computers may each use `COM4`.
 
+If Windows cannot find Arduino CLI or AVR tools, follow [manual tool discovery and TOML configuration](setup/windows/README.md#find-tools-and-set-their-paths-manually) for search commands, the exact fields to edit and path checks.
+
 The first trial uses LoRa at nominal 437.5 MHz, 2 dBm and a 1,000 ms pause after each completed frame. Use frequency and power authorized for your location. These guides define the supported setup; success on a particular computer pair requires its own upload and radio logs.
 
 ## Start a trial
