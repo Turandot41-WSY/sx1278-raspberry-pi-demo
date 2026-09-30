@@ -1668,16 +1668,17 @@
     {
       "id": "author-credit",
       "type": "text",
-      "x": 42,
-      "y": 81,
-      "w": 360,
+      "x": 1310,
+      "y": 24,
+      "w": 240,
       "h": 17,
       "group": "Brand",
       "text": "Author: Shiyi Wang",
       "size": 12,
       "color": "$muted",
       "font": "$font",
-      "weight": "400"
+      "weight": "400",
+      "align": "right"
     }
   ],
   "samples": [],
