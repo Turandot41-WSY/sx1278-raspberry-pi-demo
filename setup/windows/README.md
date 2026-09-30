@@ -245,3 +245,11 @@ For missing tools, follow [Find tools and set their paths manually](#find-tools-
 - The intended COM port and A/B board are configured; build and upload succeed.
 
 Continue with the [transmitter](../../transmit/README.md), [receiver](../../receiver/README.md), or [hardware checks](../../tests/README.md) for the selected role. A Windows sender runs `python transmit/main.py`; a Windows receiver runs `python receiver/main.py`. In Windows → Windows, these commands run on different computers with separate local serial ports.
+
+## Open the receiver display
+
+After configuring and uploading the receiving board, run `python receiver/main.py`
+from the repository root. Open [the local page](http://127.0.0.1:8878/monitor)
+on the same computer. No separate frontend installation is required.
+Follow [browser demonstration](../../receiver/README.md#browser-demonstration)
+to clear the visible tracks between transmissions while reception keeps running.

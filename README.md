@@ -1,12 +1,12 @@
 # SX1278 antenna transmission and reception
 
-Send saved telemetry through two Arduino Nano and Ra-02/SX1278 assemblies, capture the received bytes, and compare the original terminal logs. Nano **B / endpoint 2** sends; Nano **A / endpoint 1** receives.
+Send saved telemetry through two Arduino Nano and Ra-02/SX1278 assemblies, display received telemetry in a local browser, preserve the received bytes, and compare the original logs. Nano **B / endpoint 2** sends; Nano **A / endpoint 1** receives.
 
 | Folder | Purpose | Start here |
 |---|---|---|
 | [`dataset/`](dataset/README.md) | Acquire orbit inputs and keep the bundled replay data | [Dataset and frame format](dataset/README.md) |
 | [`transmit/`](transmit/README.md) | Prepare frames and transmit through the local Nano | [Trial with three frames](transmit/README.md) |
-| [`receiver/`](receiver/README.md) | Capture packets and verify them against the sender log | [Receive and compare](receiver/README.md) |
+| [`receiver/`](receiver/README.md) | Capture packets, display telemetry and verify original logs | [Receive and compare](receiver/README.md) |
 | [`firmware/`](firmware/README.md) | Nano firmware, radio tables, shared UART code and build tools | [Wiring and firmware](firmware/README.md) |
 | [`setup/`](setup/README.md) | Install tools and configure each computer | [Raspberry Pi 5](setup/raspberry-pi/README.md) · [macOS](setup/macos/README.md) · [Windows](setup/windows/README.md) |
 | [`tests/`](tests/README.md) | Run individual checks after connecting the hardware | [Hardware checks](tests/README.md) |
@@ -46,6 +46,8 @@ On the receiving computer:
 python receiver/main.py
 ```
 
+Open [the local receiver page](http://127.0.0.1:8878/monitor) on that computer and wait for **Ready for new transmission**. The page starts with the command above. For another presentation, reload the page before resending; reception and log saving continue. See [browser demonstration](receiver/README.md#browser-demonstration).
+
 On the transmitting computer:
 
 ```text
@@ -65,7 +67,7 @@ sx1278-raspberry-pi-demo/
 ├── requirements.txt            authoritative Python dependency snapshot
 ├── dataset/                    main.py, config.toml, data and preparation code
 ├── transmit/                   main.py, config.toml and sending code
-├── receiver/                   main.py, config.toml and verify.py
+├── receiver/                   main.py, config.toml, display/ and verify.py
 ├── firmware/                   endpoint, config, host, conformance and tools
 ├── setup/                      index and three platform setup READMEs
 └── tests/                      individual hardware checks and their README
@@ -74,3 +76,8 @@ sx1278-raspberry-pi-demo/
 `firmware/build/`, `dataset/data/orbit/` and `output/` are generated locally and excluded from Git. Build and upload on the computer attached to each Nano, then keep the generated manifest with that installed image. Save original trial directories and the source revision from `git rev-parse HEAD`.
 
 When updating an existing clone, stop radio processes and preserve local settings and trial output before pulling. Operator settings now live in `dataset/config.toml`, `transmit/config.toml` and `receiver/config.toml`. Reapply the actual device and board with `firmware/tools/configure_antenna.py`, and follow the module README commands.
+
+The browser display update uses the existing environment and firmware. Existing
+`receiver/config.toml` settings remain compatible. After pulling the update, restart
+the Python receiver once to load the new code; later demonstrations only require a
+page reload. No firmware rebuild or upload is required for this display update.

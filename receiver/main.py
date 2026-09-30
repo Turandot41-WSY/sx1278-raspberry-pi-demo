@@ -16,7 +16,7 @@ def main(arguments=None) -> int:
 
     Processing flow:
         Read listen settings -> verify and configure the Nano
-        -> capture packet bytes -> close UART and preserve evidence.
+        -> capture packet bytes and serve the local display -> close UART and preserve evidence.
     """
     action, remaining = select_action(arguments, "main_receive", ("listen",))
     return receive_saved.run(remaining)

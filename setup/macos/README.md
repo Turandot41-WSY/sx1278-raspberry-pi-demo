@@ -107,3 +107,11 @@ If tools are not found, check `arduino-cli version` and `arduino-cli core list`.
 - The actual `/dev/cu.*` port is selected; Nano A builds and uploads successfully.
 
 Continue with the [receiver guide](../../receiver/README.md) or the [hardware checks](../../tests/README.md). Keep the receiver running while the sender operates. The receiver prints packets and writes `events.jsonl`; all verification is performed from those logs.
+
+## Open the receiver display
+
+After configuring and uploading the receiving board, run `python receiver/main.py`
+from the repository root. Open [the local page](http://127.0.0.1:8878/monitor)
+on the same computer. No separate frontend installation is required.
+Follow [browser demonstration](../../receiver/README.md#browser-demonstration)
+to clear the visible tracks between transmissions while reception keeps running.

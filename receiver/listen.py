@@ -1,10 +1,10 @@
 """Capture radio packets on a local Nano independently of the sending computer.
 
 Call tree:
-run -> validate settings/build -> preserve configuration -> open_nano_port
+run -> validate settings/build -> preserve configuration -> start local display -> open_nano_port
     -> configure_endpoint [shared identity/profile/PA setup; no START_TX]
     -> receive_window [ARM_RX -> RX_ARMED -> RX_PACKET/RX_TIMEOUT]
-    -> record exact packet bytes and host time -> close UART, evidence
+    -> record exact packet bytes and host time -> close UART, evidence and display
 """
 
 import argparse
@@ -19,6 +19,7 @@ from firmware.host.profile_truth import load_profile_truth
 from firmware.host.serial_transport import EndpointTransport, SystemClock, open_nano_port
 from firmware.host.endpoint import SerialEvidence, configure_endpoint
 from receiver.radio import receive_window
+from receiver.display.server import DisplayService, create_server
 
 
 def run(arguments=None) -> int:
@@ -30,7 +31,7 @@ def run(arguments=None) -> int:
     by the existing firmware. These observations are diagnostic capture evidence.
 
     Processing flow:
-        Validate settings and build -> snapshot configuration -> settle UART
+        Validate settings and build -> snapshot configuration -> start display -> settle UART
         -> verify identity/registers -> repeat receive windows -> summarize/close.
         Ctrl+C ends capture; a protocol failure records INCOMPLETE and stops.
 
@@ -57,6 +58,9 @@ def run(arguments=None) -> int:
         +-- secrets.randbelow
         +-- print
         +-- evidence.record
+        +-- create_server
+        +-- DisplayService
+        +-- display.start
         +-- open_nano_port
         +-- clock.sleep_ms
         +-- port.reset_input_buffer
@@ -68,7 +72,8 @@ def run(arguments=None) -> int:
         +-- time.time_ns
         +-- repr
         +-- port.close
-        `-- evidence.close
+        +-- evidence.close
+        `-- display.close
     """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--device", required=True)
@@ -79,6 +84,13 @@ def run(arguments=None) -> int:
     parser.add_argument("--timeout-ms", type=int, default=2000)
     parser.add_argument("--boot-settle-ms", type=int, default=2500)
     parser.add_argument("--max-windows", type=int, default=0)
+    parser.add_argument("--display", action=argparse.BooleanOptionalAction, default=True,
+                        help="serve the local browser display (default: enabled)")
+    parser.add_argument("--display-port", type=int, default=8878,
+                        help="local HTTP port, 1-65535 (default: 8878)")
+    parser.add_argument("--reference-dataset", type=Path,
+                        default=PROJECT_ROOT / "dataset/data/replay/gomx1-example/orbit",
+                        help="local frozen orbit matching the transmitted dataset")
     options = parse_configured_args(parser, arguments, "main_receive", section="listen")
     if options.device.startswith("tcp://"):
         parser.error("listen requires a local UART, for example COM4")
@@ -88,6 +100,8 @@ def run(arguments=None) -> int:
         parser.error("timeout must be positive and boot settling nonnegative")
     if not 0 <= options.max_windows <= 0x100000000:
         parser.error("max_windows must be zero or a positive uint32 range length")
+    if not 1 <= options.display_port <= 65535:
+        parser.error("display_port must be between 1 and 65535")
     manifest_text = options.manifest.read_text(encoding="utf-8")
     manifest = json.loads(manifest_text)
     if manifest.get("compiled") is not True:
@@ -109,6 +123,7 @@ def run(arguments=None) -> int:
     clock = SystemClock()
     run_token = secrets.randbelow(0xFFFFFFFF) + 1
     port = None
+    display = None
     windows = 0
     packets = 0
     timeouts = 0
@@ -121,6 +136,11 @@ def run(arguments=None) -> int:
                         rx_window_ms=options.rx_window_ms, timeout_ms=options.timeout_ms,
                         boot_settle_ms=options.boot_settle_ms, max_windows=options.max_windows,
                         nominal_reg_frf_word=0x6D6000)
+        if options.display:
+            server = create_server(options.display_port, directory.parent,
+                                   options.reference_dataset, directory / "events.jsonl")
+            display = DisplayService(server)
+            display.start()
         port = open_nano_port(options.device)
         clock.sleep_ms(options.boot_settle_ms)
         port.reset_input_buffer()
@@ -155,7 +175,11 @@ def run(arguments=None) -> int:
             if port is not None:
                 port.close()
         finally:
-            evidence.record("summary", status=status, completed_windows=windows,
-                            rx_packets=packets, rx_timeouts=timeouts)
-            evidence.close()
+            try:
+                evidence.record("summary", status=status, completed_windows=windows,
+                                rx_packets=packets, rx_timeouts=timeouts)
+            finally:
+                evidence.close()
+                if display is not None:
+                    display.close()
     return exit_code

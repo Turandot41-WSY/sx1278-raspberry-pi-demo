@@ -2,7 +2,7 @@
 
 [Repository overview](../README.md) · [Transmit](../transmit/README.md) · [Hardware checks](../tests/README.md)
 
-`receiver/main.py` listens through the local Nano A, endpoint 1, prints received packets, and saves their bytes and radio status. Run it on macOS or Windows after completing the [macOS](../setup/macos/README.md) or [Windows](../setup/windows/README.md) setup. The sender uses Nano B on Raspberry Pi 5 or another Windows computer.
+`receiver/main.py` listens through the local Nano A, endpoint 1, prints received packets, saves their bytes and radio status, and serves the local browser display. Run it on macOS or Windows after completing the [macOS](../setup/macos/README.md) or [Windows](../setup/windows/README.md) setup. The sender uses Nano B on Raspberry Pi 5 or another Windows computer.
 
 Activate `sx1278-benchmark` and run from the repository root. Record the source revision with `git rev-parse HEAD` on both computers.
 
@@ -48,6 +48,53 @@ python receiver/main.py
 `python -m receiver.main` uses the same settings. Wait for `RX_ARMED` before confirming transmission on the sender. Empty `RX_TIMEOUT` windows are expected while the sender is idle. A received packet prints its actual length, PHY CRC status and hexadecimal bytes; the JSONL log preserves raw metrics, timestamps and serial messages.
 
 For the initial trial, look for three `RX_PACKET` lines with `length=64` and `phy_crc_ok=1`. Stop with **Ctrl+C** after the sender completes. Keep the directory printed for this session. Its `events.jsonl`, firmware manifest and radio table snapshots belong to the trial.
+
+## Browser demonstration
+
+The same `python receiver/main.py` command starts the approved display at
+[http://127.0.0.1:8878/monitor](http://127.0.0.1:8878/monitor). Open it on the receiving
+computer before starting transmission. The page shows the regional ground track,
+ground station, latest received ECEF telemetry, slant range and model Doppler.
+All logos and map assets are local; no Internet, Node.js, additional Python
+packages or separate web process is needed. The server listens only on this computer.
+
+For repeated demonstrations:
+
+1. Leave `max_windows = 0` in `receiver/config.toml` so reception continues while the sender is idle.
+2. Open the page and wait for **Ready for new transmission**.
+3. Start the sender. Valid frames from the bundled five passes build five tracks; a pass with no valid received frames cannot appear.
+4. After the sender finishes, keep the receiver running. The last tracks remain visible.
+5. Reload the page (Cmd+R on Mac; Ctrl+R on Windows), wait for **Ready for new transmission**, then start the sender again.
+
+Reloading clears only this browser presentation: map tracks, both curves, latest
+values and visible counters. It does not restart the Nano, stop capture or delete
+`events.jsonl`. The new page starts at its first successful telemetry snapshot and
+shows packets received after that point. Reloading during transmission therefore
+shows only the remaining packets. Each browser tab has its own starting point.
+Without a reload, another transmission adds another set of tracks.
+
+The bundled local reference is GOMX-1 / NORAD 39430. Received bytes must match the
+reference exactly to assign a known pass. This is a ground replay demonstration;
+model Doppler is not measured CFO. Valid/rejected counters describe received
+packets in the current presentation, not the total number sent or a loss rate.
+
+Optional overrides (existing configuration files work unchanged):
+
+```text
+python receiver/main.py --no-display
+python receiver/main.py --display-port 8879
+python receiver/main.py --reference-dataset dataset/data/orbit/YOUR_DATASET
+```
+
+These options can also be added as `display` (boolean, default true),
+`display_port` (integer 1–65535, default 8878) and `reference_dataset` (path to the
+matching frozen orbit directory) inside `[listen]` in `receiver/config.toml`.
+Use `--no-display` for terminal capture alone. If the HTTP port is occupied, stop
+the older receiver or choose another port before retrying. Ctrl+C closes reception
+and its page service; closing or reloading the browser does not stop reception.
+
+For a payload comparison, continue to use a separate capture per trial as described
+below. A browser reload is not a new evidence file or a trial boundary in the log.
 
 ## Compare the original logs
 
